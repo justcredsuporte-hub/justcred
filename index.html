@@ -1,95 +1,1374 @@
-Abrir uma empresa de empréstimos no Brasil é totalmente possível, mas já vou te adiantar: não é só abrir um CNPJ e começar a emprestar dinheiro. Esse é um dos setores mais regulados do país, principalmente pelo Banco Central do Brasil.
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JustCred — Crédito Rápido até R$500</title>
+<meta name="description" content="Empréstimo pessoal de até R$500 na hora, sem burocracia, direto no Pix."/>
+<meta property="og:title" content="JustCred — Crédito até R$500 na hora"/>
+<meta property="og:description" content="Solicite até R$500 e receba via Pix em minutos."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💚</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#00E676;--gd:#00C45A;--gg:rgba(0,230,118,.2);
+  --bg:#070D0A;--bg2:#0E1A13;--bg3:#162019;--card:#111C15;
+  --br:rgba(0,230,118,.15);--br2:rgba(255,255,255,.07);
+  --tx:#E8F5EC;--mt:#7A9B83;--err:#FF4757;--warn:#FFA502;
+  --f:'Montserrat',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--f);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 60% 50% at 75% 5%,rgba(0,230,118,.07) 0%,transparent 60%),
+             radial-gradient(ellipse 40% 40% at 5% 85%,rgba(0,196,90,.05) 0%,transparent 55%)}
 
-Vou te explicar de forma prática 👇
+/* TELAS */
+.tela{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.tela.ativa{display:flex}
+.tela-app{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:1}
+.tela-app.ativa{display:flex}
+/* Landing visível por padrão — JS pode esconder depois */
+#land{display:flex;min-height:100vh;flex-direction:column;position:relative;z-index:1}
 
-🏦 1. Escolha o tipo de empresa de crédito
+/* NAV LANDING */
+.nav-land{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,13,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--br)}
+.logo{font-size:1.35rem;font-weight:900;color:var(--g);letter-spacing:-1px;cursor:pointer;text-decoration:none}
+.logo b{color:var(--tx);font-weight:900}
+.nav-links{display:flex;gap:14px;align-items:center}
 
-Você precisa decidir qual modelo quer operar:
+/* NAV APP */
+.nav-app{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,13,10,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--br)}
+.nav-av{width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem;color:var(--bg);cursor:pointer;user-select:none}
+.btn-sair{background:none;border:1px solid var(--br2);color:var(--mt);padding:6px 14px;border-radius:8px;font-family:var(--f);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-sair:hover{border-color:var(--err);color:var(--err)}
 
-✔️ Correspondente bancário
-Atua em parceria com bancos (ex: intermedia empréstimos)
-Mais fácil de começar
-Não empresta dinheiro próprio
-✔️ Sociedade de Crédito Direto (SCD)
-Empresta dinheiro próprio 100% online
-Regulada pelo Banco Central
-Não pode captar depósitos
-✔️ Sociedade de Empréstimo entre Pessoas (SEP)
-Faz intermediação tipo “peer-to-peer”
-Conecta quem quer emprestar com quem quer pegar
+/* CARD AUTH */
+.card-auth{width:100%;max-width:460px;background:var(--card);border:1px solid var(--br);border-radius:20px;padding:34px 30px;position:relative;overflow:hidden}
+.card-auth::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:50%;height:2px;background:linear-gradient(90deg,transparent,var(--g),transparent)}
+.auth-logo{font-size:1.45rem;font-weight:900;color:var(--g);letter-spacing:-1px;text-align:center;margin-bottom:5px}
+.auth-logo b{color:var(--tx)}
+.auth-titulo{font-size:1.15rem;font-weight:800;text-align:center;margin-bottom:4px}
+.auth-sub{font-size:.82rem;color:var(--mt);text-align:center;margin-bottom:22px}
+.auth-link{text-align:center;margin-top:14px;font-size:.78rem;color:var(--mt)}
+.auth-link a{color:var(--g);font-weight:700;cursor:pointer;text-decoration:none}
 
-👉 Para iniciantes, muita gente começa como correspondente bancário por ser mais simples.
+/* CAMPOS */
+.campo{margin-bottom:13px}
+.campo label{display:block;font-size:.7rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+.campo input,.campo select{width:100%;background:var(--bg3);border:1px solid var(--br2);border-radius:10px;padding:13px 15px;color:var(--tx);font-family:var(--f);font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.campo input:focus,.campo select:focus{border-color:var(--g);box-shadow:0 0 0 3px var(--gg)}
+.campo input::placeholder{color:rgba(122,155,131,.4)}
+.campo select option{background:var(--bg3)}
+.ico-wrap{position:relative}.ico-wrap input{padding-left:40px}
+.ico-wrap .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--mt);font-size:.85rem;pointer-events:none}
+.pref-wrap{position:relative}.pref-wrap input{padding-left:36px}
+.pref-wrap .pref{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--g);font-weight:800;font-size:.9rem;pointer-events:none}
+.campo-nota{font-size:.68rem;color:var(--mt);margin-top:4px}
+.check-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:14px}
+.check-row input[type=checkbox]{width:16px;height:16px;min-width:16px;accent-color:var(--g);margin-top:2px;cursor:pointer}
+.check-row label{font-size:.72rem;color:var(--mt);line-height:1.5;cursor:pointer}
+.check-row a{color:var(--g);text-decoration:none}
 
-📋 2. Abrir a empresa (CNPJ)
+/* BOTÕES */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:13px 22px;border-radius:10px;font-family:var(--f);font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;border:none;text-decoration:none;white-space:nowrap}
+.btn-g{background:var(--g);color:var(--bg)}
+.btn-g:hover{background:var(--gd);transform:translateY(-1px);box-shadow:0 8px 22px var(--gg)}
+.btn-g:disabled{opacity:.55;transform:none !important;cursor:not-allowed;box-shadow:none}
+.btn-out{background:transparent;color:var(--tx);border:1px solid var(--br2)}
+.btn-out:hover{border-color:var(--g);color:var(--g)}
+.btn-w{width:100%}
+.btn-lg{padding:15px 26px;font-size:.93rem;border-radius:12px}
+.btn-ghost{background:none;border:none;color:var(--mt);font-family:var(--f);font-size:.78rem;cursor:pointer;text-decoration:underline;padding:0}
+.sep-ou{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:.72rem;color:var(--mt)}
+.sep-ou::before,.sep-ou::after{content:'';flex:1;height:1px;background:var(--br)}
 
-Passos básicos:
+/* STEPPER */
+.stepper{display:flex;align-items:center;gap:5px;margin-bottom:20px;flex-wrap:wrap}
+.stp{display:flex;align-items:center;gap:5px;font-size:.7rem;font-weight:700}
+.stp-n{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:900;flex-shrink:0}
+.stp.done{color:var(--g)}.stp.done .stp-n{background:var(--g);color:var(--bg)}
+.stp.ativo{color:var(--g)}.stp.ativo .stp-n{background:rgba(0,230,118,.15);border:2px solid var(--g);color:var(--g)}
+.stp.idle{color:var(--mt)}.stp.idle .stp-n{background:var(--bg3);border:1px solid var(--br2);color:var(--mt)}
+.stp-seta{color:var(--br2);font-size:.72rem;flex-shrink:0}
+.stp-seta.done{color:var(--g)}
 
-Contratar um contador
-Escolher natureza jurídica (geralmente LTDA)
-Registrar na Junta Comercial do seu estado
-Obter CNPJ na Receita Federal do Brasil
-Alvará da prefeitura
-⚖️ 3. Autorização do Banco Central (se for SCD ou SEP)
+/* PROGRESS */
+.prog-wrap{height:8px;background:var(--bg3);border-radius:100px;overflow:hidden;margin:14px 0 5px}
+.prog-fill{height:100%;background:var(--g);border-radius:100px;transition:width .4s ease;width:0%}
+.prog-txt{font-size:.75rem;color:var(--mt);font-weight:700;text-align:center;margin-bottom:18px}
+.ck-item{display:flex;align-items:center;gap:9px;font-size:.82rem;font-weight:600;color:var(--mt);opacity:.3;transition:all .4s;margin-bottom:9px}
+.ck-item.ok{opacity:1;color:var(--g)}
 
-Se você quiser emprestar dinheiro próprio:
+/* SIDEBAR + LAYOUT */
+.app-body{display:flex;flex:1;padding-top:60px}
+.sidebar{width:210px;min-width:210px;background:var(--card);border-right:1px solid var(--br);padding:18px 0;position:fixed;top:60px;bottom:0;left:0;z-index:50;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 16px;color:var(--mt);font-size:.82rem;font-weight:600;cursor:pointer;border-left:3px solid transparent;transition:all .2s;text-decoration:none}
+.sidebar a:hover{color:var(--tx);background:rgba(0,230,118,.05)}
+.sidebar a.on{color:var(--g);background:rgba(0,230,118,.08);border-left-color:var(--g)}
+.s-ico{font-size:.9rem;width:18px;text-align:center}
+.sep{height:1px;background:var(--br);margin:10px 13px}
+.conteudo{margin-left:210px;flex:1;padding:26px 22px}
 
-Precisa de autorização do Banco Central
-Apresentar:
-Plano de negócios
-Origem do capital
-Estrutura de governança
-Compliance e prevenção à lavagem de dinheiro
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:20px}
+.div-l{height:1px;background:var(--br2);margin:12px 0}
+.info-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;padding:7px 0;border-bottom:1px solid var(--br2)}
+.info-row:last-child{border-bottom:none}
+.info-row .lbl{color:var(--mt)}
+.info-row .v{font-weight:700}
 
-💰 Capital mínimo: geralmente na casa de milhões (depende do modelo)
+/* GRID SOL */
+.sol-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;max-width:860px}
 
-💰 4. Definir capital e estrutura
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:100px;font-size:.7rem;font-weight:700}
+.badge-g{background:rgba(0,230,118,.1);color:var(--g);border:1px solid rgba(0,230,118,.2)}
 
-Você vai precisar de:
+/* TOAST */
+.toast{position:fixed;bottom:18px;right:18px;z-index:9999;background:var(--card);border:1px solid var(--g);border-radius:11px;padding:12px 17px;font-size:.82rem;font-weight:600;color:var(--g);box-shadow:0 8px 28px rgba(0,0,0,.5);max-width:290px;animation:subir .3s ease both}
+.toast.erro{border-color:var(--err);color:var(--err)}
+@keyframes subir{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-Capital inicial (para emprestar)
-Sistema de análise de crédito (score, risco)
-Contratos jurídicos bem feitos
-Plataforma (site/app)
-📊 5. Avaliação de crédito (ESSENCIAL)
+/* MODAL */
+.modal-fundo{display:none;position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px}
+.modal-fundo.aberto{display:flex}
+.modal-box{background:var(--card);border:1px solid rgba(0,230,118,.2);border-radius:18px;max-width:540px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-top{padding:18px 22px 13px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:18px 22px;overflow-y:auto;font-size:.8rem;line-height:1.8;color:var(--mt)}
+.modal-body strong{color:var(--tx)}
+.modal-bot{padding:13px 22px;border-top:1px solid var(--br)}
+.modal-x{background:none;border:none;color:var(--mt);font-size:1.3rem;cursor:pointer;line-height:1}
 
-Aqui é onde muitas empresas quebram.
+/* LANDING */
+.hero{display:flex;align-items:center;gap:52px;padding:106px 40px 56px;max-width:1120px;margin:0 auto;flex:1}
+.hero-esq{flex:1}
+.badge-hero{display:inline-flex;align-items:center;gap:7px;background:rgba(0,230,118,.1);border:1px solid var(--br);border-radius:100px;padding:7px 14px;font-size:.72rem;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
+.pulse{width:7px;height:7px;background:var(--g);border-radius:50%;box-shadow:0 0 6px var(--g);animation:pulsar 1.8s ease infinite;display:inline-block}
+@keyframes pulsar{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.5}}
+.hero h1{font-size:clamp(2.4rem,5vw,3.7rem);font-weight:900;line-height:1.06;letter-spacing:-2px;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--g)}
+.hero-p{font-size:1rem;color:var(--mt);line-height:1.7;max-width:410px;margin-bottom:26px}
+.passos{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.passo{display:flex;align-items:center;gap:11px;font-size:.81rem;color:var(--mt)}
+.passo strong{color:var(--tx)}
+.passo-n{width:25px;height:25px;min-width:25px;border-radius:50%;background:var(--g);color:var(--bg);font-weight:900;font-size:.7rem;display:flex;align-items:center;justify-content:center}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.stats{display:flex;gap:22px;flex-wrap:wrap}
+.stat-n{font-size:1.6rem;font-weight:900;color:var(--g);letter-spacing:-1px;line-height:1}
+.stat-l{font-size:.68rem;color:var(--mt);margin-top:2px}
+.hero-card{flex:0 0 355px;background:var(--card);border:1px solid var(--br);border-radius:20px;padding:26px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.hero-card::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:52%;height:2px;background:linear-gradient(90deg,transparent,var(--g),transparent)}
+.como-item{display:flex;gap:13px;padding:13px 0;border-bottom:1px solid var(--br2)}
+.como-item:last-child{border-bottom:none;padding-bottom:0}
+.como-ico{width:37px;height:37px;min-width:37px;border-radius:10px;background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.16);display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.como-t{font-size:.84rem;font-weight:800;margin-bottom:2px}
+.como-d{font-size:.73rem;color:var(--mt)}
 
-Você vai precisar consultar:
+/* HAMBURGER */
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;z-index:201;position:relative}
+.ham span{display:block;width:22px;height:2px;background:var(--tx);border-radius:4px;transition:all .3s}
+.menu-mob{display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,13,10,.98);backdrop-filter:blur(20px);padding:78px 26px 34px;flex-direction:column;transform:translateY(-100%);transition:transform .4s cubic-bezier(.4,0,.2,1);border-bottom:1px solid var(--br)}
+.menu-mob.aberto{transform:translateY(0)}
+.menu-mob a{display:block;padding:15px 0;font-size:1.15rem;font-weight:800;color:var(--tx);border-bottom:1px solid var(--br);cursor:pointer;transition:color .2s}
+.menu-mob a:hover{color:var(--g)}
+.mob-cta{margin-top:18px;display:block;background:var(--g);color:var(--bg) !important;padding:14px;border-radius:11px;text-align:center;font-weight:900;font-size:.93rem;border:none;cursor:pointer;width:100%}
 
-Serasa Experian
-SPC Brasil
+/* RODAPÉ */
+.rodape{border-top:1px solid var(--br);padding:18px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
+.rodape p{font-size:.72rem;color:var(--mt)}
 
-E criar critérios como:
+/* RESPONSIVO */
+@media(max-width:900px){
+  .hero{flex-direction:column;padding:98px 18px 46px;gap:32px}
+  .hero-card{flex:1 1 100%;max-width:460px;width:100%}
+  .nav-land .nav-links{display:none}
+  .ham{display:flex}.menu-mob{display:flex}
+  .sidebar{display:none}
+  .conteudo{margin-left:0;padding:16px 14px}
+  .sol-grid{grid-template-columns:1fr}
+  .rodape{padding:16px 20px}
+}
+@media(max-width:600px){
+  .hero h1{font-size:2.2rem}
+  .card-auth{padding:26px 18px}
+  .stepper{gap:4px;font-size:.65rem}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeUp .38s ease both}
+</style>
+</head>
+<body>
 
-Score mínimo
-Renda comprovada
-Histórico financeiro
-📑 6. Questões legais importantes
-Seguir o Código de Defesa do Consumidor
-Informar taxas claramente
-Respeitar limites de juros (dependendo do tipo)
-LGPD (proteção de dados)
-🚀 7. Alternativa mais simples (muito usada)
+<!-- MOBILE MENU -->
+<div class="menu-mob" id="menuMob">
+  <a onclick="fecharMenu();ir('land')">Início</a>
+  <a onclick="fecharMenu();ir('cadastro')">Como funciona</a>
+  <a onclick="fecharMenu();ir('login')">Já tenho conta</a>
+  <button class="mob-cta" onclick="fecharMenu();ir('cadastro')">Solicitar crédito →</button>
+</div>
 
-Se você quer começar rápido:
+<!-- ═══════════ LANDING ═══════════ -->
+<div id="land">
+  <nav class="nav-land">
+    <div class="logo" onclick="ir('land')">Just<b>Cred</b></div>
+    <div class="nav-links">
+      <button class="btn btn-out" style="padding:8px 17px;font-size:.8rem;border-radius:8px" onclick="ir('login')">Entrar</button>
+      <button class="btn btn-g" style="padding:8px 17px;font-size:.8rem;border-radius:8px" onclick="ir('cadastro')">Solicitar crédito</button>
+    </div>
+    <button class="ham" id="hamBtn" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </nav>
 
-👉 Monte uma empresa como correspondente bancário
-Você pode trabalhar com bancos como:
+  <section class="hero">
+    <div class="hero-esq fade">
+      <div class="badge-hero"><span class="pulse"></span> Crédito liberado na hora</div>
+      <h1>Dinheiro rápido,<br/>sem <em>complicação</em><br/>nenhuma.</h1>
+      <p class="hero-p">Até R$500 direto no seu Pix em até 1 hora. Zero burocracia, zero papelada.</p>
+      <div class="passos">
+        <div class="passo"><div class="passo-n">1</div><span><strong>Cadastre-se</strong> — nome, CPF e WhatsApp</span></div>
+        <div class="passo"><div class="passo-n">2</div><span><strong>Análise automática</strong> — aprovação em segundos</span></div>
+        <div class="passo"><div class="passo-n">3</div><span><strong>Solicite o valor</strong> — de R$50 a R$500</span></div>
+        <div class="passo"><div class="passo-n">4</div><span><strong>Receba no Pix</strong> — em até 1 hora</span></div>
+      </div>
+      <div class="hero-btns">
+        <button class="btn btn-g btn-lg" onclick="ir('cadastro')">Quero meu crédito →</button>
+        <button class="btn btn-out btn-lg" onclick="ir('login')">Já tenho conta</button>
+      </div>
+      <div class="stats">
+        <div><div class="stat-n">R$500</div><div class="stat-l">Limite máximo</div></div>
+        <div><div class="stat-n">1h</div><div class="stat-l">Prazo Pix</div></div>
+        <div><div class="stat-n">30d</div><div class="stat-l">Para pagar</div></div>
+        <div><div class="stat-n">100%</div><div class="stat-l">Online</div></div>
+      </div>
+    </div>
 
-Banco do Brasil
-Caixa Econômica Federal
+    <div class="hero-card fade" style="animation-delay:.13s">
+      <div style="font-size:.93rem;font-weight:800;margin-bottom:3px">Como funciona</div>
+      <div style="font-size:.77rem;color:var(--mt);margin-bottom:16px">4 passos para ter o dinheiro</div>
+      <div class="como-item"><div class="como-ico">📝</div><div><div class="como-t">Cadastro gratuito</div><div class="como-d">Nome, CPF, WhatsApp e e-mail. Menos de 2 min.</div></div></div>
+      <div class="como-item"><div class="como-ico">⚡</div><div><div class="como-t">Análise instantânea</div><div class="como-d">Verificamos e liberamos seu limite em segundos.</div></div></div>
+      <div class="como-item"><div class="como-ico">💸</div><div><div class="como-t">Solicite o valor</div><div class="como-d">Escolha de R$50 a R$500 e informe sua chave Pix.</div></div></div>
+      <div class="como-item"><div class="como-ico">✅</div><div><div class="como-t">Receba em até 1 hora</div><div class="como-d">Pix direto na sua chave. Pague em 30 dias.</div></div></div>
+      <button class="btn btn-g btn-w btn-lg" onclick="ir('cadastro')" style="margin-top:18px">Criar conta e solicitar →</button>
+      <div style="text-align:center;margin-top:9px;font-size:.68rem;color:var(--mt)">🔒 Dados protegidos com SSL</div>
+    </div>
+  </section>
 
-E ganhar comissão por empréstimos aprovados.
+  <footer class="rodape">
+    <div class="logo" style="font-size:1.05rem">Just<b>Cred</b></div>
+    <p>© 2026 JustCred · Todos os direitos reservados</p>
+    <p><a href="/cdn-cgi/l/email-protection#711b040205120314150204011e03051431161c10181d5f121e1c" style="color:var(--g);text-decoration:none"><span class="__cf_email__" data-cfemail="345e414740574651504741445b464051745359555d581a575b59">[email&#160;protected]</span></a></p>
+  </footer>
+</div>
 
-⚠️ Atenção (muito importante)
-Agiotagem (emprestar informalmente com juros abusivos) é crime
-Sem autorização do Banco Central, você NÃO pode:
-captar dinheiro do público
-operar como instituição financeira
-💡 Dica estratégica
+<!-- ═══════════ CADASTRO ═══════════ -->
+<div id="cadastro" class="tela">
+  <div class="card-auth fade">
+    <div class="auth-logo">Just<b>Cred</b></div>
+    <div class="auth-titulo">Criar sua conta</div>
+    <div class="auth-sub">Passo 1 de 4 — Menos de 2 minutos</div>
+    <div class="stepper">
+      <div class="stp ativo"><div class="stp-n">1</div>Cadastro</div>
+      <div class="stp-seta">→</div>
+      <div class="stp idle"><div class="stp-n">2</div>Análise</div>
+      <div class="stp-seta">→</div>
+      <div class="stp idle"><div class="stp-n">3</div>Solicitar</div>
+      <div class="stp-seta">→</div>
+      <div class="stp idle"><div class="stp-n">4</div>Receber</div>
+    </div>
+    <form id="formCad" onsubmit="cadastrar(event)" autocomplete="off" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="campo"><label>Nome</label><input id="c_nome" type="text" placeholder="Nome" required/></div>
+        <div class="campo"><label>Sobrenome</label><input id="c_sobre" type="text" placeholder="Sobrenome" required/></div>
+      </div>
+      <div class="campo"><label>CPF</label><input id="c_cpf" type="text" placeholder="000.000.000-00" maxlength="14" required/></div>
+      <div class="campo"><label>E-mail</label>
+        <div class="ico-wrap"><span class="ico">✉️</span><input id="c_email" type="email" placeholder="seu@email.com" required/></div>
+      </div>
+      <div class="campo"><label>WhatsApp</label>
+        <div class="ico-wrap"><span class="ico">📱</span><input id="c_wpp" type="tel" placeholder="(00) 00000-0000" required/></div>
+      </div>
+      <div class="campo"><label>Senha</label><input id="c_senha" type="password" placeholder="Mínimo 8 caracteres" required/></div>
+      <div class="check-row">
+        <input type="checkbox" id="c_termos" required/>
+        <label for="c_termos">Aceito os <a href="#" onclick="abrirModal('modal-termos');return false">termos de uso</a> e a <a href="#" onclick="abrirModal('modal-priv');return false">política de privacidade</a></label>
+      </div>
+      <button type="submit" id="btnCad" class="btn btn-g btn-w btn-lg">Criar conta e continuar →</button>
+    </form>
+    <div class="auth-link">Já tem conta? <a onclick="ir('login')">Entrar</a> &nbsp;·&nbsp; <a onclick="ir('land')">Voltar</a></div>
+  </div>
+</div>
 
-Muita gente começa assim:
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="login" class="tela">
+  <div class="card-auth fade">
+    <div class="auth-logo">Just<b>Cred</b></div>
+    <div class="auth-titulo">Bem-vindo de volta</div>
+    <div class="auth-sub">Entre na sua conta para continuar</div>
 
-Correspondente bancário
-Escala clientes
-Depois vira fintech (SCD)
+    <div id="contaSalva" style="display:none;background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.2);border-radius:11px;padding:12px 14px;margin-bottom:14px;cursor:pointer" onclick="entrarSalvo()">
+      <div style="font-size:.65rem;color:var(--mt);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Conta salva</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="cs_av" style="width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.77rem;color:var(--bg)">?</div>
+        <div><div id="cs_nome" style="font-weight:800;font-size:.87rem">—</div><div id="cs_cpf" style="font-size:.72rem;color:var(--mt)">—</div></div>
+        <div style="margin-left:auto;color:var(--g);font-size:.74rem;font-weight:700">Entrar →</div>
+      </div>
+    </div>
+
+    <form id="formLogin" onsubmit="entrar(event)" autocomplete="off" novalidate>
+      <div class="campo"><label>E-mail ou CPF</label>
+        <div class="ico-wrap"><span class="ico">✉️</span><input id="l_id" type="text" placeholder="seu@email.com" required/></div>
+      </div>
+      <div class="campo"><label>Senha</label>
+        <div class="ico-wrap"><span class="ico">🔒</span><input id="l_sen" type="password" placeholder="••••••••" required/></div>
+      </div>
+      <div style="text-align:right;margin-bottom:14px">
+        <button type="button" class="btn-ghost" onclick="ir('recuperar')">Esqueci minha senha</button>
+      </div>
+      <button type="submit" id="btnLogin" class="btn btn-g btn-w btn-lg">Entrar →</button>
+    </form>
+    <div class="sep-ou">ou</div>
+    <button class="btn btn-out btn-w" onclick="ir('cadastro')">Criar nova conta</button>
+    <div class="auth-link">Não tem conta? <a onclick="ir('cadastro')">Cadastre-se grátis</a> &nbsp;·&nbsp; <a onclick="ir('land')">Voltar</a></div>
+  </div>
+</div>
+
+<!-- ═══════════ ANÁLISE ═══════════ -->
+<div id="analise" class="tela">
+  <div class="card-auth fade" style="max-width:430px;text-align:center">
+    <div class="auth-logo">Just<b>Cred</b></div>
+    <div class="stepper" style="justify-content:center">
+      <div class="stp done"><div class="stp-n">✓</div>Cadastro</div>
+      <div class="stp-seta done">→</div>
+      <div class="stp ativo"><div class="stp-n">2</div>Análise</div>
+      <div class="stp-seta">→</div>
+      <div class="stp idle"><div class="stp-n">3</div>Solicitar</div>
+      <div class="stp-seta">→</div>
+      <div class="stp idle"><div class="stp-n">4</div>Receber</div>
+    </div>
+    <div id="fase1">
+      <div style="font-size:2rem;margin-bottom:10px">🔍</div>
+      <div class="auth-titulo">Analisando seus dados...</div>
+      <div class="auth-sub">Aguarde um momento</div>
+      <div class="prog-wrap"><div class="prog-fill" id="pBar"></div></div>
+      <div class="prog-txt" id="pTxt">0%</div>
+      <div style="text-align:left">
+        <div class="ck-item" id="ck1"><span id="ck1i">⏳</span>&nbsp;Verificando CPF</div>
+        <div class="ck-item" id="ck2"><span id="ck2i">⏳</span>&nbsp;Analisando histórico</div>
+        <div class="ck-item" id="ck3"><span id="ck3i">⏳</span>&nbsp;Calculando limite</div>
+        <div class="ck-item" id="ck4"><span id="ck4i">⏳</span>&nbsp;Validando elegibilidade</div>
+      </div>
+    </div>
+    <div id="fase2" style="display:none">
+      <div style="font-size:3rem;margin-bottom:10px">🎉</div>
+      <div style="font-size:1.25rem;font-weight:900;color:var(--g);margin-bottom:5px" id="apNome">Parabéns!</div>
+      <div style="font-size:.93rem;font-weight:700;margin-bottom:5px">Você foi aprovado!</div>
+      <div style="font-size:.82rem;color:var(--mt);line-height:1.6;margin-bottom:16px">Análise concluída com sucesso.</div>
+      <div style="background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);border-radius:12px;padding:16px;margin-bottom:18px">
+        <div style="font-size:.66rem;color:var(--mt);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px">Limite aprovado</div>
+        <div style="font-size:1.9rem;font-weight:900;color:var(--g);letter-spacing:-1px">R$ 500,00</div>
+        <div style="font-size:.7rem;color:var(--mt);margin-top:3px">Disponível para saque via Pix</div>
+        <div style="margin-top:10px;text-align:left;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:.72rem;color:var(--g);font-weight:600">✓ CPF verificado</div>
+          <div style="font-size:.72rem;color:var(--g);font-weight:600">✓ Score aprovado — ★ 4.8</div>
+          <div style="font-size:.72rem;color:var(--g);font-weight:600">✓ Elegibilidade confirmada</div>
+        </div>
+      </div>
+      <button class="btn btn-g btn-w btn-lg" onclick="irSolicitar()" style="padding:16px;font-size:.93rem">⚡ Solicitar meu crédito agora</button>
+      <div style="margin-top:10px"><button class="btn-ghost" onclick="ir('dashboard')">Fazer depois</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SOLICITAR ═══════════ -->
+<div id="solicitar" class="tela-app">
+  <nav class="nav-app">
+    <div class="logo" onclick="ir('land')">Just<b>Cred</b></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="nav-av" id="solAv" onclick="ir('perfil')">?</div>
+      <button class="btn-sair" onclick="ir('land')">Sair</button>
+    </div>
+  </nav>
+  <div class="app-body">
+    <aside class="sidebar">
+      <a onclick="ir('dashboard')"><span class="s-ico">🏠</span> Dashboard</a>
+      <a class="on"><span class="s-ico">⚡</span> Solicitar</a>
+      <a onclick="ir('perfil')"><span class="s-ico">👤</span> Perfil</a>
+      <div class="sep"></div>
+      <a onclick="ir('land')" style="color:var(--err)"><span class="s-ico">🚪</span> Sair</a>
+    </aside>
+    <main class="conteudo fade">
+      <div class="stepper" style="margin-bottom:18px">
+        <div class="stp done"><div class="stp-n">✓</div>Cadastro</div>
+        <div class="stp-seta done">→</div>
+        <div class="stp done"><div class="stp-n">✓</div>Aprovado</div>
+        <div class="stp-seta done">→</div>
+        <div class="stp ativo"><div class="stp-n">3</div>Solicitar</div>
+        <div class="stp-seta">→</div>
+        <div class="stp idle"><div class="stp-n">4</div>Receber</div>
+      </div>
+      <div style="font-size:1.3rem;font-weight:900;letter-spacing:-.5px;margin-bottom:3px">Solicitar Crédito ⚡</div>
+      <div style="font-size:.82rem;color:var(--mt);margin-bottom:22px">Confirme os dados e receba via Pix em até 1 hora</div>
+
+      <div id="solForm">
+        <div class="sol-grid">
+          <div class="card">
+            <div style="background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.18);border-radius:11px;padding:13px 15px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:.64rem;color:var(--mt);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Limite aprovado</div>
+              <div style="font-size:1.65rem;font-weight:900;color:var(--g);letter-spacing:-1px">R$ 500,00</div></div>
+              <span class="badge badge-g">✓ Aprovado</span>
+            </div>
+            <div class="campo">
+              <label>Valor que deseja sacar</label>
+              <div class="pref-wrap"><span class="pref">R$</span><input id="s_val" type="number" placeholder="300" min="50" max="500" style="font-size:1.05rem;font-weight:700"/></div>
+              <div class="campo-nota">Mínimo R$50 · Máximo R$500</div>
+            </div>
+            <div class="campo">
+              <label>Sua chave Pix para receber</label>
+              <input id="s_pix" type="text" placeholder="CPF, celular, e-mail ou chave aleatória"/>
+              <div class="campo-nota">É aqui que vamos transferir o dinheiro</div>
+            </div>
+            <div class="campo">
+              <label>Forma de pagamento</label>
+              <select id="s_parc">
+                <option value="1">1x — Pagamento único em 30 dias</option>
+                <option value="2" selected>2x — Taxa 8% a.m.</option>
+                <option value="3">3x — Taxa 9% a.m.</option>
+              </select>
+            </div>
+            <button class="btn btn-g btn-w btn-lg" id="btnSol" onclick="confirmarSol()" style="padding:16px;margin-top:6px">💸 Confirmar solicitação</button>
+            <div style="text-align:center;margin-top:9px;font-size:.68rem;color:var(--mt)">🔒 Dados protegidos com criptografia SSL</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:13px">
+            <div class="card">
+              <div style="font-size:.84rem;font-weight:800;margin-bottom:13px">📋 Seus dados</div>
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">
+                <div id="solAvCard" style="width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.76rem;color:var(--bg)">?</div>
+                <div><div id="sol_nome" style="font-size:.87rem;font-weight:700">—</div><div id="sol_cpf" style="font-size:.72rem;color:var(--mt)">—</div></div>
+              </div>
+              <div class="div-l"></div>
+              <div style="font-size:.77rem;color:var(--mt);display:flex;flex-direction:column;gap:5px">
+                <div>📱 <span id="sol_wpp">—</span></div>
+                <div>✉️ <span id="sol_email">—</span></div>
+              </div>
+            </div>
+            <div class="card" style="background:rgba(0,230,118,.04);border-color:rgba(0,230,118,.12)">
+              <div style="font-size:.84rem;font-weight:800;color:var(--g);margin-bottom:11px">O que acontece agora</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;gap:7px;font-size:.76rem;color:var(--mt)"><span style="background:var(--g);color:var(--bg);border-radius:50%;width:17px;height:17px;min-width:17px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.6rem;flex-shrink:0">1</span>Você confirma a solicitação</div>
+                <div style="display:flex;gap:7px;font-size:.76rem;color:var(--mt)"><span style="background:var(--g);color:var(--bg);border-radius:50%;width:17px;height:17px;min-width:17px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.6rem;flex-shrink:0">2</span>Equipe processa em <strong style="color:var(--tx)">&nbsp;até 1 hora</strong></div>
+                <div style="display:flex;gap:7px;font-size:.76rem;color:var(--mt)"><span style="background:var(--g);color:var(--bg);border-radius:50%;width:17px;height:17px;min-width:17px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.6rem;flex-shrink:0">3</span>Pix cai na sua chave</div>
+                <div style="display:flex;gap:7px;font-size:.76rem;color:var(--mt)"><span style="background:var(--g);color:var(--bg);border-radius:50%;width:17px;height:17px;min-width:17px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.6rem;flex-shrink:0">4</span>Pague em 30 dias via <strong style="color:var(--tx)">&nbsp;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f352a2c2b3c2d3a3b2c2a2f302d2b3a1f38323e3633713c3032">[email&#160;protected]</a></strong></div>
+              </div>
+            </div>
+            <div style="background:rgba(255,165,2,.07);border:1px solid rgba(255,165,2,.18);border-radius:11px;padding:11px;font-size:.76rem;color:var(--warn);text-align:center;font-weight:600">⏰ Atendemos das 8h às 20h todos os dias</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="solSuc" style="display:none;max-width:680px">
+        <div class="card" style="padding:32px 28px">
+          <!-- Stepper -->
+          <div class="stepper" style="justify-content:center;margin-bottom:20px">
+            <div class="stp done"><div class="stp-n">✓</div>Cadastro</div>
+            <div class="stp-seta done">→</div>
+            <div class="stp done"><div class="stp-n">✓</div>Aprovado</div>
+            <div class="stp-seta done">→</div>
+            <div class="stp done"><div class="stp-n">✓</div>Solicitado</div>
+            <div class="stp-seta done">→</div>
+            <div class="stp ativo"><div class="stp-n">⏳</div>Aguardando</div>
+          </div>
+
+          <!-- Cabeçalho sucesso -->
+          <div style="text-align:center;margin-bottom:22px">
+            <div style="font-size:3rem;margin-bottom:10px">✅</div>
+            <div style="font-size:1.25rem;font-weight:900;color:var(--g);margin-bottom:5px">Solicitação enviada!</div>
+            <div style="font-size:.84rem;color:var(--mt);line-height:1.6">Recebemos seu pedido. Nossa equipe já está processando.</div>
+          </div>
+
+          <!-- Prazo -->
+          <div style="background:rgba(0,230,118,.08);border:2px solid rgba(0,230,118,.22);border-radius:13px;padding:16px;margin-bottom:22px;text-align:center">
+            <div style="font-size:1.6rem;margin-bottom:6px">⏱️</div>
+            <div style="font-size:.97rem;font-weight:900;color:var(--g);margin-bottom:4px">Pagamento em até 1 hora</div>
+            <div style="font-size:.77rem;color:var(--mt)">O dinheiro será enviado via Pix para a chave informada.</div>
+          </div>
+
+          <!-- CONTRATO COMPLETO -->
+          <div style="background:var(--bg3);border:1px solid var(--br);border-radius:12px;padding:20px;margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div style="font-size:.88rem;font-weight:800">📄 Seu Contrato</div>
+              <button onclick="baixarContratoPDF()" class="btn btn-out" style="padding:7px 14px;font-size:.75rem;border-radius:8px">📥 Baixar PDF</button>
+            </div>
+            <!-- Conteúdo do contrato preenchido via JS -->
+            <div id="contratoTexto" style="font-size:.78rem;line-height:1.9;color:var(--mt)"></div>
+
+            <!-- Assinatura digital -->
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--br2)">
+              <div style="font-size:.72rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Assinatura digital</div>
+              <div style="font-size:.78rem;color:var(--tx);line-height:1.6">
+                ✍️ Assinado digitalmente por <strong id="ct_nome_assin" style="color:var(--g)">—</strong><br/>
+                CPF: <strong id="ct_cpf_assin" style="color:var(--g)">—</strong><br/>
+                Data: <strong id="ct_data_assin" style="color:var(--g)">—</strong><br/>
+                IP registrado no momento da assinatura.
+              </div>
+            </div>
+          </div>
+
+          <!-- Aviso e-mail -->
+          <div style="background:rgba(61,184,245,.07);border:1px solid rgba(61,184,245,.2);border-radius:10px;padding:12px;margin-bottom:18px;font-size:.78rem;color:#3DB8F5;text-align:center">
+            📧 Uma cópia deste contrato foi enviada para nossa equipe.<br/>
+            <span style="font-size:.72rem;opacity:.8">Guarde o PDF para seus registros.</span>
+          </div>
+
+          <!-- Resumo -->
+          <div style="background:var(--bg3);border-radius:10px;padding:13px;margin-bottom:18px">
+            <div style="font-size:.8rem;font-weight:800;margin-bottom:9px">Resumo da solicitação</div>
+            <div class="info-row"><span class="lbl">Valor</span><span id="sv_val" class="v" style="color:var(--g)">—</span></div>
+            <div class="info-row"><span class="lbl">Pix para receber</span><span id="sv_pix" class="v">—</span></div>
+            <div class="info-row"><span class="lbl">Parcelas</span><span id="sv_parc" class="v">—</span></div>
+            <div class="info-row"><span class="lbl">Pagar até</span><span id="sv_venc" class="v" style="color:var(--warn)">—</span></div>
+          </div>
+
+          <button class="btn btn-g btn-w btn-lg" onclick="ir('dashboard')">Ver meu painel →</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════ DASHBOARD ═══════════ -->
+<div id="dashboard" class="tela-app">
+  <nav class="nav-app">
+    <div class="logo" onclick="ir('land')">Just<b>Cred</b></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="nav-av" id="dashAv" onclick="ir('perfil')">?</div>
+      <button class="btn-sair" onclick="ir('land')">Sair</button>
+    </div>
+  </nav>
+  <div class="app-body">
+    <aside class="sidebar">
+      <a class="on"><span class="s-ico">🏠</span> Dashboard</a>
+      <a onclick="ir('perfil')"><span class="s-ico">👤</span> Perfil</a>
+      <div class="sep"></div>
+      <a onclick="ir('land')" style="color:var(--err)"><span class="s-ico">🚪</span> Sair</a>
+    </aside>
+    <main class="conteudo fade">
+      <div style="margin-bottom:20px">
+        <h2 id="dSauda" style="font-size:1.35rem;font-weight:900;letter-spacing:-.5px;margin-bottom:3px">Olá! 👋</h2>
+        <p id="dData" style="font-size:.82rem;color:var(--mt)">Bem-vindo à JustCred</p>
+      </div>
+
+      <div id="dAprovado" style="max-width:480px">
+        <div style="background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.22);border-radius:17px;padding:26px;text-align:center;margin-bottom:14px">
+          <div style="font-size:2rem;margin-bottom:9px">🎉</div>
+          <div style="font-size:1.05rem;font-weight:900;color:var(--g);margin-bottom:5px">Você está aprovado!</div>
+          <div style="font-size:.83rem;color:var(--mt);line-height:1.6;margin-bottom:16px">Crédito de até <strong style="color:var(--tx)">R$500</strong> disponível.<br/>Solicite agora e receba em até 1 hora.</div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:16px;text-align:left">
+            <div style="font-size:.72rem;color:var(--g);font-weight:600;margin-bottom:5px">✓ CPF verificado</div>
+            <div style="font-size:.72rem;color:var(--g);font-weight:600;margin-bottom:5px">✓ Score aprovado — ★ 4.8</div>
+            <div style="font-size:.72rem;color:var(--g);font-weight:600">✓ Limite liberado: R$ 500,00</div>
+          </div>
+          <button class="btn btn-g btn-w btn-lg" onclick="irSolicitar()">⚡ Solicitar meu crédito</button>
+        </div>
+        <div style="font-size:.77rem;color:var(--mt)">Dúvidas? <a href="/cdn-cgi/l/email-protection#3f554a4c4b5c4d5a5b4c4a4f504d4b5a7f58525e5653115c5052" style="color:var(--g)"><span class="__cf_email__" data-cfemail="bbd1cec8cfd8c9dedfc8cecbd4c9cfdefbdcd6dad2d795d8d4d6">[email&#160;protected]</span></a></div>
+      </div>
+
+      <div id="dAguardando" style="display:none;max-width:480px">
+        <div class="card" style="margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
+            <div style="font-size:1.5rem">⏳</div>
+            <div><div style="font-size:.93rem;font-weight:800">Crédito solicitado</div><div style="font-size:.77rem;color:var(--mt)">Aguardando liberação</div></div>
+          </div>
+          <div class="info-row"><span class="lbl">Valor solicitado</span><span id="dv_val" class="v" style="color:var(--g)">—</span></div>
+          <div class="info-row"><span class="lbl">Chave Pix</span><span id="dv_pix" class="v">—</span></div>
+          <div class="info-row"><span class="lbl">Prazo</span><span class="v" style="color:var(--warn)">até 1 hora</span></div>
+          <div style="background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.2);border-radius:8px;padding:10px;font-size:.76rem;color:var(--warn);font-weight:600;text-align:center;margin-top:11px">
+            📲 Você receberá o Pix assim que processarmos
+          </div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div style="font-size:.74rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px">Quando chegar o vencimento</div>
+          <div style="font-size:.92rem;font-weight:800;margin-bottom:3px">Pague via Pix em 30 dias</div>
+          <div style="font-size:.77rem;color:var(--mt);margin-bottom:15px">Escaneie o QR Code ou copie a chave abaixo</div>
+          <div style="background:#fff;border-radius:10px;padding:10px;display:inline-block;margin-bottom:13px">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=justcredsuporte%40gmail.com&bgcolor=ffffff&color=000000" width="180" height="180" alt="QR Pix" style="display:block;border-radius:4px"/>
+          </div>
+          <div style="background:var(--bg3);border-radius:10px;padding:13px;margin-bottom:11px">
+            <div style="font-size:.64rem;color:var(--mt);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Chave Pix para pagamento</div>
+            <div style="font-size:.88rem;font-weight:800;color:var(--g);margin-bottom:9px"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="264c535552455443425553564954524366414b474f4a0845494b">[email&#160;protected]</a></div>
+            <button onclick="copiarPix()" class="btn btn-out btn-w" style="padding:9px;font-size:.77rem">📋 Copiar chave Pix</button>
+          </div>
+          <div style="font-size:.72rem;color:var(--mt);line-height:1.7">
+            Valor: <strong id="dv_valpag" style="color:var(--tx)">—</strong><br/>
+            Vence em: <strong id="dv_venc" style="color:var(--warn)">—</strong>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════ PERFIL ═══════════ -->
+<div id="perfil" class="tela-app">
+  <nav class="nav-app">
+    <div class="logo" onclick="ir('land')">Just<b>Cred</b></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="nav-av" id="perfAv">?</div>
+      <button class="btn-sair" onclick="ir('land')">Sair</button>
+    </div>
+  </nav>
+  <div class="app-body">
+    <aside class="sidebar">
+      <a onclick="ir('dashboard')"><span class="s-ico">🏠</span> Dashboard</a>
+      <a class="on"><span class="s-ico">👤</span> Perfil</a>
+      <div class="sep"></div>
+      <a onclick="ir('land')" style="color:var(--err)"><span class="s-ico">🚪</span> Sair</a>
+    </aside>
+    <main class="conteudo fade">
+      <div style="font-size:1.3rem;font-weight:900;letter-spacing:-.5px;margin-bottom:3px">Meu Perfil</div>
+      <div style="font-size:.82rem;color:var(--mt);margin-bottom:22px">Dados pessoais e segurança</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+        <div id="perfAvCard" style="width:62px;height:62px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:var(--bg)">?</div>
+        <div>
+          <div id="p_nomeTopo" style="font-size:1.05rem;font-weight:800">—</div>
+          <div id="p_emailTopo" style="font-size:.8rem;color:var(--mt);margin-top:2px">—</div>
+          <div style="margin-top:5px"><span class="badge badge-g">✓ Conta verificada</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:780px">
+        <div class="card">
+          <div style="font-size:.87rem;font-weight:800;margin-bottom:14px">Dados pessoais</div>
+          <div class="campo"><label>Nome completo</label><input id="p_nome" type="text" placeholder="Seu nome"/></div>
+          <div class="campo"><label>CPF</label><input id="p_cpf" type="text" readonly style="opacity:.6"/></div>
+          <div class="campo"><label>WhatsApp</label><input id="p_wpp" type="tel" placeholder="(00) 00000-0000"/></div>
+          <div class="campo"><label>E-mail</label><input id="p_email" type="email" placeholder="seu@email.com"/></div>
+          <button class="btn btn-g" onclick="salvarPerfil()">Salvar alterações</button>
+        </div>
+        <div class="card">
+          <div style="font-size:.87rem;font-weight:800;margin-bottom:14px">Chave Pix</div>
+          <div class="campo"><label>Chave para recebimento</label><input id="p_pix" type="text" placeholder="CPF, celular ou e-mail"/></div>
+          <button class="btn btn-out" onclick="salvarPix()">Atualizar chave</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════ RECUPERAR SENHA ═══════════ -->
+<div id="recuperar" class="tela">
+  <div class="card-auth fade">
+    <div class="auth-logo">Just<b>Cred</b></div>
+    <div id="r1">
+      <div class="auth-titulo">Recuperar senha</div>
+      <div class="auth-sub">Informe seu e-mail ou CPF</div>
+      <form onsubmit="recP1(event)" novalidate>
+        <div class="campo"><label>E-mail ou CPF</label><div class="ico-wrap"><span class="ico">✉️</span><input id="r_id" type="text" placeholder="seu@email.com" required/></div></div>
+        <button type="submit" id="btnRec" class="btn btn-g btn-w btn-lg">Enviar código →</button>
+      </form>
+      <div class="auth-link"><a onclick="ir('login')">Voltar ao login</a></div>
+    </div>
+    <div id="r2" style="display:none">
+      <div class="auth-titulo">Código enviado 📬</div>
+      <div class="auth-sub" id="r2sub">Insira o código de 6 dígitos</div>
+      <form onsubmit="recP2(event)" novalidate>
+        <div class="campo"><label>Código</label><input id="r_cod" type="text" placeholder="000000" maxlength="6" style="text-align:center;font-size:1.45rem;font-weight:800;letter-spacing:7px" required/></div>
+        <div style="text-align:center;font-size:.75rem;color:var(--mt);margin-bottom:13px">Expira em <span id="r_timer" style="color:var(--g);font-weight:700">02:00</span></div>
+        <button type="submit" class="btn btn-g btn-w btn-lg">Verificar →</button>
+      </form>
+      <div class="auth-link"><a onclick="reenviarCod()">Reenviar</a> · <a onclick="ir('login')">Cancelar</a></div>
+    </div>
+    <div id="r3" style="display:none">
+      <div class="auth-titulo">Nova senha 🔐</div>
+      <div class="auth-sub">Escolha uma senha forte</div>
+      <form onsubmit="recP3(event)" novalidate>
+        <div class="campo"><label>Nova senha</label><input id="r_s1" type="password" placeholder="Mínimo 8 caracteres" required/></div>
+        <div class="campo"><label>Confirmar</label><input id="r_s2" type="password" placeholder="Repita a senha" required/></div>
+        <button type="submit" class="btn btn-g btn-w btn-lg">Salvar senha →</button>
+      </form>
+    </div>
+    <div id="r4" style="display:none;text-align:center;padding:8px 0">
+      <div style="font-size:2.8rem;margin-bottom:10px">✅</div>
+      <div style="font-size:1.05rem;font-weight:800;color:var(--g);margin-bottom:7px">Senha redefinida!</div>
+      <div style="font-size:.82rem;color:var(--mt);margin-bottom:18px">Faça login com sua nova senha.</div>
+      <button class="btn btn-g btn-w btn-lg" onclick="ir('login')">Ir para o login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL CONTRATO ═══════════ -->
+<div id="modal-contrato" class="modal-fundo" onclick="if(event.target===this)fecharModal('modal-contrato')">
+  <div class="modal-box" style="max-width:680px">
+    <div class="modal-top">
+      <span style="font-size:.93rem;font-weight:800">📄 Contrato de Empréstimo — JustCred</span>
+      <button class="modal-x" onclick="fecharModal('modal-contrato')">×</button>
+    </div>
+    <div class="modal-corpo" id="contratoConteudo" style="font-size:.82rem;line-height:1.9;color:var(--mt)">
+      <!-- preenchido via JS -->
+    </div>
+    <div class="modal-bot" style="display:flex;flex-direction:column;gap:12px">
+      <!-- Assinatura digital -->
+      <div style="background:var(--bg3);border-radius:10px;padding:14px">
+        <div style="font-size:.75rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Assinatura digital</div>
+        <div style="font-size:.78rem;color:var(--mt);margin-bottom:10px">
+          Ao marcar abaixo, você confirma que leu e concorda com todos os termos deste contrato, assinando-o digitalmente com seu CPF.
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <input type="checkbox" id="chk-assinar" style="width:16px;height:16px;min-width:16px;accent-color:var(--g);margin-top:2px;cursor:pointer"/>
+          <label for="chk-assinar" style="font-size:.78rem;color:var(--tx);cursor:pointer;line-height:1.5">
+            Li e aceito os termos do contrato acima. Assino digitalmente com meu CPF <strong id="ct-cpf-assin" style="color:var(--g)">—</strong> nesta data: <strong id="ct-data-assin" style="color:var(--g)">—</strong>
+          </label>
+        </div>
+      </div>
+      <!-- Botões -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="baixarPDF()" class="btn btn-out" style="flex:1;padding:12px;font-size:.82rem">📥 Baixar PDF</button>
+        <button onclick="assinarEConfirmar()" id="btnAssinar" class="btn btn-g" style="flex:2;padding:12px;font-size:.88rem">✍️ Assinar e confirmar solicitação</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL TERMOS ═══════════ -->
+<div id="modal-termos" class="modal-fundo" onclick="if(event.target===this)fecharModal('modal-termos')">
+  <div class="modal-box">
+    <div class="modal-top"><span style="font-size:.93rem;font-weight:800">📄 Termos de Uso — JustCred</span><button class="modal-x" onclick="fecharModal('modal-termos')">×</button></div>
+    <div class="modal-body">
+      <strong>Última atualização: 20/03/2026</strong><br/><br/>
+      <strong>1. Aceitação</strong><br/>Ao usar a JustCred, você concorda com estes termos.<br/><br/>
+      <strong>2. Serviço</strong><br/>Empréstimos pessoais de até R$500 via Pix, sujeitos à análise e aprovação.<br/><br/>
+      <strong>3. Elegibilidade</strong><br/>Necessário: 18+ anos, CPF válido, Pix ativo e residência no Brasil.<br/><br/>
+      <strong>4. Taxas</strong><br/>Taxa de 8% a.m. Em caso de atraso: multa de 2% + mora de 1% a.m.<br/><br/>
+      <strong>5. Pagamento</strong><br/>Via Pix para <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8de7f8fef9eeffe8e9fef8fde2fff9e8cdeae0ece4e1a3eee2e0">[email&#160;protected]</a> em até 30 dias após a liberação.<br/><br/>
+      <strong>6. Contato</strong><br/><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="412b343235223324253234312e33352401262c20282d6f222e2c">[email&#160;protected]</a>
+    </div>
+    <div class="modal-bot"><button class="btn btn-g" onclick="fecharModal('modal-termos')">Entendi ✓</button></div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL PRIVACIDADE ═══════════ -->
+<div id="modal-priv" class="modal-fundo" onclick="if(event.target===this)fecharModal('modal-priv')">
+  <div class="modal-box">
+    <div class="modal-top"><span style="font-size:.93rem;font-weight:800">🔒 Política de Privacidade</span><button class="modal-x" onclick="fecharModal('modal-priv')">×</button></div>
+    <div class="modal-body">
+      <strong>Última atualização: 20/03/2026</strong><br/><br/>
+      <strong>1. Dados coletados</strong><br/>Nome, CPF, e-mail, WhatsApp e chave Pix para análise e liberação.<br/><br/>
+      <strong>2. Uso</strong><br/>Exclusivamente para análise de crédito e comunicação sobre seu empréstimo.<br/><br/>
+      <strong>3. Compartilhamento</strong><br/>Não vendemos seus dados. Compartilhamos somente com parceiros de análise ou por exigência legal.<br/><br/>
+      <strong>4. Segurança</strong><br/>Criptografia SSL em todas as transmissões de dados.<br/><br/>
+      <strong>5. LGPD</strong><br/>Você tem direito de acesso, correção e exclusão dos seus dados a qualquer momento.<br/><br/>
+      <strong>6. Contato DPO</strong><br/><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c1abb4b2b5a2b3a4a5b2b4b1aeb3b5a481a6aca0a8adefa2aeac">[email&#160;protected]</a>
+    </div>
+    <div class="modal-bot"><button class="btn btn-g" onclick="fecharModal('modal-priv')">Entendi ✓</button></div>
+  </div>
+</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+// ─── CONFIG ───
+const FORMSPREE = 'https://formspree.io/f/mkoqepwa';
+const SUPA_URL  = 'https://xamhcyxgnxnaaceaqdmy.supabase.co';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhbWhjeXhnbnhuYWFjZWFxZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMzQ3NDcsImV4cCI6MjA4OTYxMDc0N30.uc60n1hdR6g3HR6S1s7TNoSfcUf5mZ6uYDUb7dgMl-c';
+let supa = null;
+
+// Carrega Supabase de forma async — não bloqueia o site se falhar
+(function(){
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  s.onload = function(){
+    try{ supa = supabase.createClient(SUPA_URL, SUPA_KEY); }
+    catch(e){ console.warn('Supabase init falhou:', e); }
+  };
+  s.onerror = function(){ console.warn('Supabase CDN não carregou.'); };
+  document.head.appendChild(s);
+})();
+
+// ─── STORAGE (localStorage para persistir entre reloads) ───
+function get(){ try{ return JSON.parse(localStorage.getItem('jc')||'{}'); }catch{ return {}; } }
+function set(d){ try{ const s={...get(),...d}; localStorage.setItem('jc',JSON.stringify(s)); }catch{} }
+
+// ─── NAVEGAÇÃO ───
+function ir(id){
+  // Esconde tudo
+  document.querySelectorAll('.tela, .tela-app').forEach(el=>el.classList.remove('ativa'));
+  // Landing tem tratamento especial (display:flex por padrão no CSS)
+  const land = document.getElementById('land');
+  if(land) land.style.display = 'none';
+
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  if(id === 'land'){
+    land.style.display = 'flex';
+  } else {
+    el.classList.add('ativa');
+  }
+  window.scrollTo(0,0);
+  if(id==='login')     prepLogin();
+  if(id==='dashboard') prepDash();
+  if(id==='perfil')    prepPerfil();
+  if(id==='solicitar') prepSolicitar();
+}
+
+// ─── UTILS ───
+function ini(n){ if(!n) return '?'; return n.trim().split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function txt(id,v){ const el=document.getElementById(id); if(el) el.textContent=(v!=null&&v!=='')?v:'—'; }
+function setv(id,v){ const el=document.getElementById(id); if(el&&v) el.value=v; }
+function bLoad(id,t){ const b=document.getElementById(id); if(b){b._t=b.textContent;b.disabled=true;b.textContent=t||'Aguarde...';} }
+function bOk(id){ const b=document.getElementById(id); if(b){b.disabled=false;b.textContent=b._t||b.textContent;} }
+function avatares(av){ ['solAv','solAvCard','dashAv','perfAv','perfAvCard','cs_av'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=av||'?'; }); }
+
+// ─── TOAST ───
+function toast(msg,tipo){
+  const t=document.createElement('div');
+  t.className='toast'+(tipo==='erro'?' erro':'');
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),4200);
+}
+
+// ─── FORMSPREE ───
+async function enviar(dados){
+  try{
+    const r=await fetch(FORMSPREE,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({...dados,_hora:new Date().toLocaleString('pt-BR')})
+    });
+    return r.ok;
+  }catch(e){ console.warn('Formspree:',e); return false; }
+}
+
+// ─── CADASTRO ───
+async function cadastrar(e){
+  e.preventDefault();
+  const nome=(document.getElementById('c_nome').value.trim()+' '+document.getElementById('c_sobre').value.trim()).trim();
+  const cpf=document.getElementById('c_cpf').value.trim();
+  const email=document.getElementById('c_email').value.trim();
+  const wpp=document.getElementById('c_wpp').value.trim();
+  const senha=document.getElementById('c_senha').value;
+
+  if(!nome||nome.trim().length<3){ toast('Informe nome e sobrenome.','erro'); return; }
+  if(!cpf||cpf.length<11){ toast('Informe um CPF válido.','erro'); return; }
+  if(!email||!email.includes('@')){ toast('Informe um e-mail válido.','erro'); return; }
+  if(!wpp||wpp.length<10){ toast('Informe o WhatsApp com DDD.','erro'); return; }
+  if(senha.length<8){ toast('Senha mínima: 8 caracteres.','erro'); return; }
+  if(!document.getElementById('c_termos').checked){ toast('Aceite os termos para continuar.','erro'); return; }
+
+  bLoad('btnCad','Criando conta...');
+
+  // ✅ 1. Salva no Supabase
+  let supaId = null;
+  try {
+    const {data,error} = await supa.from('usuarios')
+      .insert([{nome,cpf,email,whatsapp:wpp,senha,chave_pix:cpf}])
+      .select('id').single();
+    if(!error && data) supaId = data.id;
+    else if(error && error.code==='23505'){
+      bOk('btnCad');
+      toast('CPF ou e-mail já cadastrado. Faça login.','erro');
+      return;
+    }
+  } catch(e){ console.warn('Supabase cadastro:',e); }
+
+  // ✅ 2. Salva no localStorage (funciona offline também)
+  set({ id:supaId, nome, cpf, email, wpp, senha, chavePix:cpf, solicitado:false, val:0, venc:'', pixSol:'' });
+
+  // ✅ 3. Notifica via Formspree
+  enviar({ tipo:'🆕 NOVO CADASTRO — JustCred', nome, cpf, email, whatsapp:wpp });
+
+  bOk('btnCad');
+  document.getElementById('formCad').reset();
+  avatares(ini(nome));
+  rodarAnalise(nome);
+}
+
+// ─── LOGIN ───
+function prepLogin(){
+  const s=get();
+  const card=document.getElementById('contaSalva');
+  if(s.nome&&s.cpf){
+    txt('cs_av',ini(s.nome)); txt('cs_nome',s.nome); txt('cs_cpf',s.cpf);
+    card.style.display='block';
+    setv('l_id',s.email||s.cpf);
+  } else { card.style.display='none'; }
+}
+
+function entrarSalvo(){
+  const s=get();
+  if(!s.nome){ toast('Nenhuma conta salva.','erro'); return; }
+  avatares(ini(s.nome));
+  ir('dashboard');
+  toast('✓ Olá de novo, '+s.nome.split(' ')[0]+'!');
+}
+
+async function entrar(e){
+  e.preventDefault();
+  const id=document.getElementById('l_id').value.trim();
+  const sen=document.getElementById('l_sen').value;
+  const s=get();
+
+  if(!s.nome){ toast('Usuário não encontrado. Cadastre-se primeiro.','erro'); return; }
+  if(id!==s.email&&id!==s.cpf){ toast('E-mail ou CPF incorreto.','erro'); return; }
+  if(sen!==s.senha){ toast('Senha incorreta.','erro'); return; }
+
+  bLoad('btnLogin','Entrando...');
+  await new Promise(r=>setTimeout(r,600)); // breve delay para UX
+  bOk('btnLogin');
+
+  avatares(ini(s.nome));
+  document.getElementById('formLogin').reset();
+  ir('dashboard');
+  toast('✓ Bem-vindo(a), '+s.nome.split(' ')[0]+'!');
+}
+
+// ─── ANÁLISE ───
+function rodarAnalise(nome){
+  ir('analise');
+  document.getElementById('fase1').style.display='block';
+  document.getElementById('fase2').style.display='none';
+  const bar=document.getElementById('pBar');
+  const ptxt=document.getElementById('pTxt');
+  bar.style.width='0%'; ptxt.textContent='0%';
+  ['ck1','ck2','ck3','ck4'].forEach(id=>{ document.getElementById(id).className='ck-item'; document.getElementById(id+'i').textContent='⏳'; });
+
+  [{id:'ck1',p:25,d:900},{id:'ck2',p:55,d:2200},{id:'ck3',p:78,d:3500},{id:'ck4',p:100,d:4700}].forEach(st=>{
+    setTimeout(()=>{
+      document.getElementById(st.id).className='ck-item ok';
+      document.getElementById(st.id+'i').textContent='✓';
+      bar.style.width=st.p+'%'; ptxt.textContent=st.p+'%';
+    },st.d);
+  });
+  setTimeout(()=>{
+    document.getElementById('fase1').style.display='none';
+    document.getElementById('fase2').style.display='block';
+    txt('apNome','Parabéns, '+nome.split(' ')[0]+'!');
+  },5900);
+}
+
+// ─── SOLICITAR ───
+function prepSolicitar(){
+  const s=get();
+  const av=ini(s.nome);
+  avatares(av);
+  txt('sol_nome',s.nome); txt('sol_cpf',s.cpf);
+  txt('sol_wpp',s.wpp); txt('sol_email',s.email);
+  setv('s_pix',s.chavePix||s.cpf);
+  document.getElementById('solForm').style.display='block';
+  document.getElementById('solSuc').style.display='none';
+}
+
+function irSolicitar(){
+  prepSolicitar();
+  ir('solicitar');
+}
+
+async function confirmarSol(){
+  const val  = parseFloat(document.getElementById('s_val').value);
+  const pix  = document.getElementById('s_pix').value.trim();
+  const parc = document.getElementById('s_parc').value;
+
+  if(!val||val<50||val>500){ toast('Informe um valor entre R$50 e R$500.','erro'); return; }
+  if(!pix){ toast('Informe sua chave Pix para recebimento.','erro'); return; }
+
+  const s = get();
+  const pLabel = parc==='1' ? '1x sem juros — pagamento único em 30 dias'
+    : parc==='2' ? '2x de R$ '+(val*1.08/2).toFixed(2)+' — taxa 8% a.m.'
+    : '3x de R$ '+(val*1.09/3).toFixed(2)+' — taxa 9% a.m.';
+
+  const venc = new Date(); venc.setDate(venc.getDate()+30);
+  const vStr = venc.toLocaleDateString('pt-BR');
+  const hoje = new Date().toLocaleString('pt-BR');
+
+  // Monta o contrato em texto para o Formspree
+  const contratoTexto = `
+CONTRATO DE EMPRÉSTIMO PESSOAL — JustCred
+==========================================
+
+CONTRATANTE:
+  Nome: ${s.nome||'—'}
+  CPF: ${s.cpf||'—'}
+  WhatsApp: ${s.wpp||'—'}
+  E-mail: ${s.email||'—'}
+
+CONTRATADA: JustCred — justcredsuporte@gmail.com
+
+CLÁUSULA 1ª — OBJETO
+Empréstimo pessoal no valor de R$ ${val.toFixed(2)}, a ser pago em ${pLabel}, com vencimento em ${vStr}.
+
+CLÁUSULA 2ª — LIBERAÇÃO
+Valor transferido via Pix para a chave ${pix} em até 1 hora após a confirmação.
+
+CLÁUSULA 3ª — JUROS
+${parc==='1' ? 'Empréstimo sem juros para pagamento único.' : parc==='2' ? 'Taxa de juros de 8% ao mês.' : 'Taxa de juros de 9% ao mês.'}
+Em caso de atraso: multa de 2% + mora de 1% ao mês.
+
+CLÁUSULA 4ª — PAGAMENTO
+Via Pix para justcredsuporte@gmail.com até a data de vencimento.
+
+CLÁUSULA 5ª — RESPONSABILIDADES
+O contratante declara que as informações prestadas são verdadeiras.
+
+CLÁUSULA 6ª — FORO
+Comarca de Campo Grande/MS.
+
+ASSINATURA DIGITAL: ${s.nome||'—'} — CPF: ${s.cpf||'—'} — ${hoje}
+==========================================`;
+
+  bLoad('btnSol','Enviando...');
+
+  // ✅ 1. Formspree — envia solicitação + contrato completo
+  const ok = await enviar({
+    'tipo'                : '💸 NOVA SOLICITAÇÃO — JustCred',
+    '👤 Nome'             : s.nome||'—',
+    '🪪 CPF'              : s.cpf||'—',
+    '📱 WhatsApp'         : s.wpp||'—',
+    '✉️ Email cliente'    : s.email||'—',
+    '💰 Valor'            : 'R$ '+val.toFixed(2),
+    '🔑 Pix cliente'      : pix,
+    '📅 Parcelas'         : pLabel,
+    '📆 Vencimento'       : vStr,
+    '🏦 Pix pagamento'    : 'justcredsuporte@gmail.com',
+    '⚡ Status'           : 'PENDENTE — aguardando liberação',
+    '📄 CONTRATO ASSINADO': contratoTexto,
+  });
+
+  // ✅ 2. Supabase — salva no banco
+  try {
+    const vencISO = venc.toISOString().split('T')[0];
+    if(supa) await supa.from('solicitacoes').insert([{
+      usuario_id: s.id||null, nome: s.nome, cpf: s.cpf,
+      email: s.email, whatsapp: s.wpp, valor_solicitado: val,
+      chave_pix_recebimento: pix, parcelas: pLabel,
+      vencimento: vencISO, status: 'pendente'
+    }]);
+  } catch(e){ console.warn('Supabase:',e); }
+
+  bOk('btnSol');
+
+  if(!ok){ toast('Erro de conexão. Verifique sua internet e tente novamente.','erro'); return; }
+
+  // Salva sessão
+  set({ chavePix:pix, val, solicitado:true, venc:vStr, pixSol:pix });
+
+  // Preenche resumo
+  txt('sv_val','R$ '+val.toFixed(2));
+  txt('sv_pix',pix);
+  txt('sv_parc',pLabel);
+  txt('sv_venc',vStr);
+
+  // Preenche contrato na tela de sucesso
+  txt('ct_nome_assin', s.nome||'—');
+  txt('ct_cpf_assin',  s.cpf||'—');
+  txt('ct_data_assin', hoje);
+
+  document.getElementById('contratoTexto').innerHTML = `
+    <strong style="color:var(--tx)">CONTRATANTE</strong><br/>
+    Nome: <strong style="color:var(--tx)">${s.nome||'—'}</strong> &nbsp;·&nbsp; CPF: <strong style="color:var(--tx)">${s.cpf||'—'}</strong><br/>
+    WhatsApp: ${s.wpp||'—'} &nbsp;·&nbsp; E-mail: ${s.email||'—'}<br/><br/>
+    <strong style="color:var(--tx)">CONTRATADA</strong><br/>
+    JustCred — justcredsuporte@gmail.com<br/><br/>
+    <div style="height:1px;background:rgba(255,255,255,.07);margin:10px 0"></div>
+    <strong style="color:var(--tx)">Cláusula 1ª — Objeto</strong><br/>
+    Empréstimo de <strong style="color:var(--g)">R$ ${val.toFixed(2)}</strong>, pago em <strong style="color:var(--tx)">${pLabel}</strong>, vencimento em <strong style="color:var(--warn)">${vStr}</strong>.<br/><br/>
+    <strong style="color:var(--tx)">Cláusula 2ª — Liberação</strong><br/>
+    Transferido via Pix para <strong style="color:var(--g)">${pix}</strong> em até 1 hora após confirmação.<br/><br/>
+    <strong style="color:var(--tx)">Cláusula 3ª — Juros</strong><br/>
+    ${parc==='1'?'Sem juros — pagamento único.':parc==='2'?'Taxa 8% ao mês. Atraso: multa 2% + mora 1% a.m.':'Taxa 9% ao mês. Atraso: multa 2% + mora 1% a.m.'}<br/><br/>
+    <strong style="color:var(--tx)">Cláusula 4ª — Pagamento</strong><br/>
+    Via Pix para <strong style="color:var(--g)">justcredsuporte@gmail.com</strong> até <strong style="color:var(--warn)">${vStr}</strong>.<br/><br/>
+    <strong style="color:var(--tx)">Cláusula 5ª — Responsabilidades</strong><br/>
+    O contratante declara que as informações prestadas são verdadeiras.<br/><br/>
+    <strong style="color:var(--tx)">Cláusula 6ª — Foro</strong><br/>
+    Comarca de Campo Grande/MS.
+  `;
+
+  document.getElementById('solForm').style.display = 'none';
+  document.getElementById('solSuc').style.display  = 'block';
+}
+
+// ─── BAIXAR CONTRATO PDF ───
+function baixarContratoPDF(){
+  const s    = get();
+  const nome = s.nome || 'Cliente';
+  const html = document.getElementById('contratoTexto').innerText;
+  const assin= `\n\nASSINATURA DIGITAL\n${document.getElementById('ct_nome_assin').textContent}\nCPF: ${document.getElementById('ct_cpf_assin').textContent}\nData: ${document.getElementById('ct_data_assin').textContent}`;
+
+  const j = window.open('','_blank');
+  j.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/>
+  <title>Contrato JustCred — ${nome}</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;color:#1a1a1a;font-size:13px;line-height:1.9}
+    .logo{color:#00C45A;font-size:20px;font-weight:900;text-align:center;margin-bottom:4px}
+    .sub{text-align:center;color:#666;font-size:11px;margin-bottom:6px}
+    .titulo{text-align:center;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #00C45A;padding-bottom:8px;margin-bottom:18px}
+    hr{border:none;border-top:1px solid #ddd;margin:14px 0}
+    .assin{background:#f9f9f9;border:1px solid #ddd;border-radius:8px;padding:14px;margin-top:16px;font-size:12px}
+    .rodape{text-align:center;font-size:10px;color:#999;margin-top:24px;border-top:1px solid #eee;padding-top:10px}
+    @media print{@page{margin:2cm}}
+  </style></head><body>
+  <div class="logo">JustCred</div>
+  <div class="sub">justcredsuporte@gmail.com</div>
+  <div class="titulo">Contrato de Empréstimo Pessoal</div>
+  <pre style="white-space:pre-wrap;font-family:Arial,sans-serif;font-size:13px;line-height:1.9">${html}</pre>
+  <div class="assin"><strong>ASSINATURA DIGITAL</strong><br/>
+  ${document.getElementById('ct_nome_assin').textContent}<br/>
+  CPF: ${document.getElementById('ct_cpf_assin').textContent}<br/>
+  Data/Hora: ${document.getElementById('ct_data_assin').textContent}</div>
+  <div class="rodape">JustCred © 2026 — Documento gerado e assinado digitalmente</div>
+  <script>setTimeout(function(){window.print();},500);<\/script>
+  </body></html>`);
+  j.document.close();
+}
+
+// ─── DASHBOARD ───
+function prepDash(){
+  const s=get();
+  const pn=(s.nome||'').split(' ')[0]||'você';
+  txt('dSauda','Olá, '+pn+'! 👋');
+  txt('dData','Bem-vindo(a) à JustCred — '+new Date().toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}));
+  avatares(ini(s.nome));
+  const aprov=document.getElementById('dAprovado');
+  const aguar=document.getElementById('dAguardando');
+  if(s.solicitado&&s.val){
+    aprov.style.display='none'; aguar.style.display='block';
+    txt('dv_val','R$ '+parseFloat(s.val).toFixed(2));
+    txt('dv_pix',s.pixSol||s.chavePix||'—');
+    txt('dv_valpag','R$ '+parseFloat(s.val).toFixed(2));
+    if(s.venc){ txt('dv_venc',s.venc); }
+    else{ const v=new Date(); v.setDate(v.getDate()+30); txt('dv_venc',v.toLocaleDateString('pt-BR')); }
+  } else {
+    aprov.style.display='block'; aguar.style.display='none';
+  }
+}
+
+function copiarPix(){
+  const ch='justcredsuporte@gmail.com';
+  if(navigator.clipboard){ navigator.clipboard.writeText(ch).then(()=>toast('✓ Chave Pix copiada!')); }
+  else{ const el=document.createElement('textarea'); el.value=ch; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); toast('✓ Chave Pix copiada!'); }
+}
+
+// ─── PERFIL ───
+function prepPerfil(){
+  const s=get(); const av=ini(s.nome);
+  const pa=document.getElementById('perfAvCard'); if(pa) pa.textContent=av||'?';
+  const pav=document.getElementById('perfAv'); if(pav) pav.textContent=av||'?';
+  txt('p_nomeTopo',s.nome); txt('p_emailTopo',s.email);
+  setv('p_nome',s.nome); setv('p_cpf',s.cpf);
+  setv('p_wpp',s.wpp); setv('p_email',s.email);
+  setv('p_pix',s.chavePix||s.cpf);
+}
+function salvarPerfil(){
+  const s=get();
+  const nome=document.getElementById('p_nome')?.value||s.nome;
+  const wpp=document.getElementById('p_wpp')?.value||s.wpp;
+  const email=document.getElementById('p_email')?.value||s.email;
+  set({nome,wpp,email}); prepPerfil(); avatares(ini(nome));
+  toast('✓ Dados salvos!');
+}
+function salvarPix(){
+  const pix=document.getElementById('p_pix')?.value;
+  if(pix){ set({chavePix:pix}); toast('✓ Chave Pix atualizada!'); }
+}
+
+// ─── RECUPERAR SENHA ───
+let _timer=null;
+function rMostrar(n){ [1,2,3,4].forEach(i=>{ const el=document.getElementById('r'+i); if(el) el.style.display=i===n?'block':'none'; }); }
+async function recP1(e){
+  e.preventDefault();
+  const id=document.getElementById('r_id').value.trim();
+  bLoad('btnRec','Enviando...'); await enviar({tipo:'🔑 RECUPERAÇÃO SENHA',id}); bOk('btnRec');
+  const m=id.includes('@')?id.replace(/(.{2})(.*)(@.*)/,'$1***$3'):id.slice(0,3)+'***'+id.slice(-2);
+  txt('r2sub','Código enviado para '+m); rMostrar(2); iniciarTimer();
+}
+function iniciarTimer(){
+  if(_timer) clearInterval(_timer); let s=120;
+  const el=document.getElementById('r_timer');
+  _timer=setInterval(()=>{ s--; if(el) el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); if(s<=0){ clearInterval(_timer); if(el){el.textContent='expirado';el.style.color='var(--err)';} } },1000);
+}
+function reenviarCod(){ iniciarTimer(); toast('✓ Código reenviado!'); }
+function recP2(e){ e.preventDefault(); const c=document.getElementById('r_cod').value; if(c.length===6&&/^\d+$/.test(c)){ if(_timer) clearInterval(_timer); rMostrar(3); } else toast('Código inválido. Use 6 dígitos.','erro'); }
+function recP3(e){
+  e.preventDefault();
+  const s1=document.getElementById('r_s1').value;
+  const s2=document.getElementById('r_s2').value;
+  if(s1!==s2){ toast('As senhas não coincidem.','erro'); return; }
+  if(s1.length<8){ toast('Senha mínima: 8 caracteres.','erro'); return; }
+  set({senha:s1}); rMostrar(4);
+}
+
+// ─── CONTRATO ───
+function abrirContrato(){
+  const val  = parseFloat(document.getElementById('s_val').value);
+  const pix  = document.getElementById('s_pix').value.trim();
+  const parc = document.getElementById('s_parc').value;
+
+  if(!val||val<50||val>500){ toast('Informe um valor entre R$50 e R$500.','erro'); return; }
+  if(!pix){ toast('Informe sua chave Pix para recebimento.','erro'); return; }
+
+  const s = get();
+  const pLabel = parc==='1' ? '1 (uma) parcela sem juros'
+    : parc==='2' ? '2 (duas) parcelas — taxa 8% a.m.'
+    : '3 (três) parcelas — taxa 9% a.m.';
+
+  const venc = new Date();
+  venc.setDate(venc.getDate()+30);
+  const vStr = venc.toLocaleDateString('pt-BR');
+  const hoje = new Date().toLocaleDateString('pt-BR');
+
+  // Preenche assinatura
+  document.getElementById('ct-cpf-assin').textContent = s.cpf || '—';
+  document.getElementById('ct-data-assin').textContent = hoje;
+  document.getElementById('chk-assinar').checked = false;
+
+  // Gera o HTML do contrato
+  document.getElementById('contratoConteudo').innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:1.1rem;font-weight:900;color:var(--g);letter-spacing:-1px">JustCred</div>
+      <div style="font-size:.78rem;color:var(--mt)">justcredsuporte@gmail.com</div>
+    </div>
+
+    <div style="text-align:center;font-size:.9rem;font-weight:800;color:var(--tx);margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px">
+      Contrato de Empréstimo Pessoal
+    </div>
+
+    <strong style="color:var(--tx)">CONTRATANTE (CLIENTE):</strong><br/>
+    Nome: <strong style="color:var(--tx)">${s.nome||'—'}</strong><br/>
+    CPF: <strong style="color:var(--tx)">${s.cpf||'—'}</strong><br/>
+    WhatsApp: <strong style="color:var(--tx)">${s.wpp||'—'}</strong><br/>
+    E-mail: <strong style="color:var(--tx)">${s.email||'—'}</strong><br/><br/>
+
+    <strong style="color:var(--tx)">CONTRATADA:</strong><br/>
+    JustCred — justcredsuporte@gmail.com<br/><br/>
+
+    <div style="height:1px;background:rgba(255,255,255,.07);margin:12px 0"></div>
+
+    <strong style="color:var(--tx)">CLÁUSULA 1ª — OBJETO</strong><br/>
+    O presente contrato tem por objeto a concessão de empréstimo pessoal no valor de
+    <strong style="color:var(--g)">R$ ${parseFloat(val).toFixed(2)}</strong>,
+    a ser pago em <strong style="color:var(--tx)">${pLabel}</strong>,
+    com vencimento da primeira parcela em <strong style="color:var(--warn)">${vStr}</strong>.<br/><br/>
+
+    <strong style="color:var(--tx)">CLÁUSULA 2ª — LIBERAÇÃO</strong><br/>
+    O valor será transferido via Pix para a chave
+    <strong style="color:var(--g)">${pix}</strong>
+    em até 1 (uma) hora após a assinatura deste contrato, mediante análise e aprovação da JustCred.<br/><br/>
+
+    <strong style="color:var(--tx)">CLÁUSULA 3ª — JUROS E ENCARGOS</strong><br/>
+    ${parc==='1'
+      ? 'Empréstimo sem juros para pagamento único.'
+      : parc==='2'
+      ? 'Incidirá taxa de juros de 8% (oito por cento) ao mês sobre o valor emprestado.'
+      : 'Incidirá taxa de juros de 9% (nove por cento) ao mês sobre o valor emprestado.'
+    }
+    Em caso de atraso no pagamento, incidirá multa de 2% sobre o valor da parcela, acrescida de mora de 1% ao mês.<br/><br/>
+
+    <strong style="color:var(--tx)">CLÁUSULA 4ª — FORMA DE PAGAMENTO</strong><br/>
+    O pagamento deverá ser realizado via Pix para a chave
+    <strong style="color:var(--g)">justcredsuporte@gmail.com</strong>
+    até a data de vencimento informada. O comprovante deverá ser enviado pelo WhatsApp da JustCred.<br/><br/>
+
+    <strong style="color:var(--tx)">CLÁUSULA 5ª — RESPONSABILIDADES</strong><br/>
+    O contratante declara que as informações prestadas são verdadeiras e se responsabiliza pelo pagamento nas condições acordadas.
+    Informações falsas implicam cancelamento imediato e medidas cabíveis.<br/><br/>
+
+    <strong style="color:var(--tx)">CLÁUSULA 6ª — FORO</strong><br/>
+    As partes elegem o foro da comarca de Campo Grande/MS para dirimir quaisquer controvérsias.<br/><br/>
+
+    <div style="height:1px;background:rgba(255,255,255,.07);margin:12px 0"></div>
+
+    <div style="font-size:.75rem;color:var(--mt);text-align:center">
+      Contrato gerado em ${hoje} · JustCred © 2026
+    </div>
+  `;
+
+  abrirModal('modal-contrato');
+}
+
+function baixarPDF(){
+  const s = get();
+  const conteudo = document.getElementById('contratoConteudo').innerHTML;
+  const janela = window.open('', '_blank');
+  janela.document.write(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8"/>
+      <title>Contrato JustCred — ${s.nome||'Cliente'}</title>
+      <style>
+        body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;color:#222;font-size:13px;line-height:1.8}
+        h1{color:#00C45A;font-size:18px;text-align:center;margin-bottom:4px}
+        .sub{text-align:center;color:#666;font-size:11px;margin-bottom:20px}
+        .titulo{text-align:center;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;border-bottom:2px solid #00C45A;padding-bottom:8px}
+        strong{color:#222}
+        .g{color:#00C45A}
+        .warn{color:#e67e22}
+        hr{border:none;border-top:1px solid #eee;margin:14px 0}
+        .rodape{text-align:center;font-size:10px;color:#999;margin-top:20px}
+        @media print{body{margin:20px}}
+      </style>
+    </head>
+    <body>
+      <h1>JustCred</h1>
+      <div class="sub">justcredsuporte@gmail.com</div>
+      <div class="titulo">Contrato de Empréstimo Pessoal</div>
+      <div style="font-family:Arial,sans-serif;font-size:13px;line-height:1.9;color:#222">
+        ${document.getElementById('contratoConteudo').innerText
+          .replace(/\n/g,'<br/>')
+          .replace('JustCred\njustcredsuporte@gmail.com\n\nContrato de Empréstimo Pessoal\n\n','')}
+      </div>
+      <hr/>
+      <div class="rodape">JustCred © 2026 — Documento gerado digitalmente em ${new Date().toLocaleString('pt-BR')}</div>
+      <script>setTimeout(function(){window.print();},400);<\/script>
+    </body>
+    </html>
+  `);
+  janela.document.close();
+}
+
+async function assinarEConfirmar(){
+  if(!document.getElementById('chk-assinar').checked){
+    toast('Marque que leu e aceita o contrato para continuar.','erro');
+    return;
+  }
+  fecharModal('modal-contrato');
+  await confirmarSol();
+}
+
+// ─── CONFIRMAR SOLICITAÇÃO ───
+document.addEventListener('DOMContentLoaded', function(){
+  var cpfEl = document.getElementById('c_cpf');
+  if(cpfEl) cpfEl.addEventListener('input', function(e){
+    var v = e.target.value.replace(/\D/g,'');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    e.target.value = v;
+  });
+  var wppEl = document.getElementById('c_wpp');
+  if(wppEl) wppEl.addEventListener('input', function(e){
+    var v = e.target.value.replace(/\D/g,'');
+    v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+    v = v.replace(/(\d{5})(\d)/, '$1-$2');
+    e.target.value = v.slice(0,15);
+  });
+});
+
+// ─── HAMBURGER ───
+function toggleMenu(){ document.getElementById('menuMob').classList.toggle('aberto'); }
+function fecharMenu(){ document.getElementById('menuMob').classList.remove('aberto'); }
+
+// ─── MODAIS ───
+function abrirModal(id){ document.getElementById(id).classList.add('aberto'); document.body.style.overflow='hidden'; }
+function fecharModal(id){ document.getElementById(id).classList.remove('aberto'); document.body.style.overflow=''; }
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape') document.querySelectorAll('.modal-fundo.aberto').forEach(function(m){ m.classList.remove('aberto'); document.body.style.overflow=''; });
+});
+
+// ─── INIT ───
+// Landing já visível por CSS — apenas esconde outras telas
+document.querySelectorAll('.tela, .tela-app').forEach(function(el){ el.classList.remove('ativa'); });
+</script>
+</body>
+</html>
